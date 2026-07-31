@@ -35,7 +35,6 @@
       --primary-pastel: #B5E2FA;    /* Soft Pastel Blue */
       --accent-pastel: #EDAFB8;     /* Soft Pastel Pink */
       --success-pastel: #E2ECE9;    /* Soft Sage Green */
-      --badge-pastel: #E8AEB7;      /* Subtle Badge Pink */
       --border-radius: 16px;
     }
 
@@ -57,10 +56,10 @@
 
     .container {
       width: 100%;
-      max-width: 480px; /* Saiz ideal skrin telefon */
+      max-width: 480px;
     }
 
-    /* --- HEADER (HANYA LOGO SAHAJA) --- */
+    /* --- HEADER (HANYA LOGO) --- */
     header {
       text-align: center;
       margin-bottom: 25px;
@@ -178,7 +177,7 @@
       text-decoration: underline;
     }
 
-    /* --- SEKSYEN BACKUP (EXPORT & IMPORT) --- */
+    /* --- SEKSYEN BACKUP --- */
     .backup-section {
       margin-top: 25px;
       padding-top: 15px;
@@ -213,7 +212,7 @@
       background-color: #E2E8F0;
     }
 
-    /* --- MODAL POPUP --- */
+    /* --- MODAL POPUP & UI PEMILIHAN MASA MESRA MOBILE --- */
     .modal {
       position: fixed;
       top: 0; left: 0;
@@ -256,6 +255,26 @@
       outline: none;
       background-color: #FAFAFA;
       color: var(--text-color);
+    }
+
+    /* Reka bentuk khas untuk pemilih masa (Jam & Minit) */
+    .time-picker-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .time-picker-container select {
+      flex: 1;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .time-colon {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #4A4E69;
     }
 
     .modal-content input:focus, .modal-content select:focus {
@@ -336,7 +355,6 @@
           <button id="btn-export" class="btn-secondary">📥 Export Backup</button>
           <button id="btn-import-trigger" class="btn-secondary">📤 Import Backup</button>
         </div>
-        <!-- Input Fail Tersembunyi untuk Import -->
         <input type="file" id="import-file" accept=".json" class="hidden" />
       </div>
     </main>
@@ -359,12 +377,21 @@
     <div class="modal-content">
       <h3>Tambah Task Baru</h3>
       
-      <!-- Klik 2 & Taip: Input Nama, Masa & Ulangan -->
+      <!-- Input Nama Task -->
       <label for="task-title">Nama Task:</label>
       <input type="text" id="task-title" placeholder="Contoh: Makan ubat gastrik" autocomplete="off">
 
-      <label for="task-time">Pilih Masa Peringatan:</label>
-      <input type="time" id="task-time">
+      <!-- Pemilih Masa Baru (User Friendly & Direct Select) -->
+      <label>Pilih Masa Peringatan:</label>
+      <div class="time-picker-container">
+        <select id="select-hour">
+          <!-- Pilihan Jam akan dijana secara automatik oleh JS -->
+        </select>
+        <span class="time-colon">:</span>
+        <select id="select-minute">
+          <!-- Pilihan Minit akan dijana secara automatik oleh JS -->
+        </select>
+      </div>
 
       <label for="task-repeat">Task Berulang:</label>
       <select id="task-repeat">
@@ -373,7 +400,7 @@
         <option value="weekly">Setiap Minggu (Weekly)</option>
       </select>
 
-      <!-- Klik 3: Simpan -->
+      <!-- Action Buttons -->
       <div class="modal-actions">
         <button id="btn-save-task" class="btn-save">Simpan</button>
         <button id="btn-cancel-task" class="btn-cancel">Batal</button>
@@ -403,12 +430,44 @@
     const historyList = document.getElementById('history-list');
 
     const inputTitle = document.getElementById('task-title');
-    const inputTime = document.getElementById('task-time');
+    const selectHour = document.getElementById('select-hour');
+    const selectMinute = document.getElementById('select-minute');
     const inputRepeat = document.getElementById('task-repeat');
 
     const btnExport = document.getElementById('btn-export');
     const btnImportTrigger = document.getElementById('btn-import-trigger');
     const importFile = document.getElementById('import-file');
+
+    // --- POPULATE DROPDOWN JAM & MINIT ---
+    function initTimePicker() {
+      selectHour.innerHTML = '';
+      selectMinute.innerHTML = '';
+
+      // Jam 00 hingga 23
+      for (let h = 0; h < 24; h++) {
+        const hourStr = String(h).padStart(2, '0');
+        selectHour.innerHTML += `<option value="${hourStr}">${hourStr}</option>`;
+      }
+
+      // Minit 00 hingga 55 (selang 5 minit untuk mudah pilih, atau 1 minit)
+      for (let m = 0; m < 60; m += 5) {
+        const minStr = String(m).padStart(2, '0');
+        selectMinute.innerHTML += `<option value="${minStr}">${minStr}</option>`;
+      }
+    }
+
+    // Tetapkan masa semasa sebagai default dalam modal
+    function setDefaultTime() {
+      const now = new Date();
+      const currentH = String(now.getHours()).padStart(2, '0');
+      // Bundarkan minit ke 5 minit terdekat
+      const roundedM = String(Math.ceil(now.getMinutes() / 5) * 5 % 60).padStart(2, '0');
+      
+      selectHour.value = currentH;
+      selectMinute.value = roundedM;
+    }
+
+    initTimePicker();
 
     // Minta Kebenaran Notifikasi Browser
     if ("Notification" in window && Notification.permission !== "granted") {
@@ -419,22 +478,20 @@
 
     // --- EVENT LISTENERS (MODAL & NAVIGASI) ---
 
-    // Klik 1: Buka Modal
     btnOpenModal.addEventListener('click', () => {
+      setDefaultTime();
       taskModal.classList.remove('hidden');
       inputTitle.focus();
     });
 
-    // Batal Modal
     btnCancelTask.addEventListener('click', () => {
       taskModal.classList.add('hidden');
       clearInputs();
     });
 
-    // Klik 3: Simpan Task
     btnSaveTask.addEventListener('click', () => {
       const title = inputTitle.value.trim();
-      const time = inputTime.value;
+      const time = `${selectHour.value}:${selectMinute.value}`;
       const repeat = inputRepeat.value;
 
       if (!title) {
@@ -445,7 +502,7 @@
       const newTask = {
         id: Date.now(),
         title: title,
-        time: time || "Tiada Masa",
+        time: time,
         repeat: repeat,
         notified: false
       };
@@ -458,7 +515,6 @@
       clearInputs();
     });
 
-    // Pindah ke Halaman Sejarah
     linkToHistory.addEventListener('click', (e) => {
       e.preventDefault();
       mainPage.classList.add('hidden');
@@ -466,14 +522,13 @@
       renderHistory();
     });
 
-    // Kembali ke Halaman Utama
     linkToMain.addEventListener('click', (e) => {
       e.preventDefault();
       historyPage.classList.add('hidden');
       mainPage.classList.remove('hidden');
     });
 
-    // --- FUNGSI EXPORT & IMPORT BACKUP DATA ---
+    // --- EXPORT & IMPORT BACKUP DATA ---
 
     btnExport.addEventListener('click', () => {
       const backupData = {
@@ -517,7 +572,7 @@
         }
       };
       reader.readAsText(file);
-      importFile.value = ''; // Reset input
+      importFile.value = '';
     });
 
     // --- FUNGSI RENDER & URUS DATA ---
@@ -580,7 +635,6 @@
       });
     }
 
-    // Pindahkan Task ke Sejarah & Urus Task Berulang
     window.completeTask = function(id) {
       const taskIndex = tasks.findIndex(t => t.id === id);
       if (taskIndex > -1) {
@@ -588,7 +642,6 @@
         const now = new Date();
         const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        // Catat rekod dalam History
         history.unshift({
           id: Date.now(),
           title: currentTask.title,
@@ -596,11 +649,9 @@
           completedAt: timeString
         });
 
-        // Jika Task Berulang (Daily/Weekly), reset status notifikasi
         if (currentTask.repeat === 'daily' || currentTask.repeat === 'weekly') {
-          currentTask.notified = false; // Boleh terima notifikasi esok/minggu depan
+          currentTask.notified = false;
         } else {
-          // Jika Task Sekali Sahaja, padam dari senarai aktif
           tasks.splice(taskIndex, 1);
         }
 
@@ -616,7 +667,6 @@
 
     function clearInputs() {
       inputTitle.value = '';
-      inputTime.value = '';
       inputRepeat.value = 'none';
     }
 
