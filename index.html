@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<!-- SEO Basic -->
+  <title>CubaIngat - Tak Ingat? CubaIngat.</title>
+  <meta name="description" content="Web app untuk bantu anda yang selalu lupa. Tak Ingat? CubaIngat." />
+  <meta name="keywords" content="CubaIngat, peringatan, task note, pengurusan masa, checklist, aplikasi pelupa" />
+  <meta name="author" content="CubaIngat.com" />
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Tak Ingat? CubaIngat." />
+  <meta property="og:description" content="Web app untuk bantu anda yang selalu lupa." />
+  <meta property="og:url" content="https://cubaingat.com" />
+  <meta property="og:image" content="https://arleta.site/interactivelink/118/logo-cubaingat.png" />
+
+<!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tak Ingat? CubaIngat." />
+  <meta name="twitter:description" content="Web app untuk bantu anda yang selalu lupa." />
+  <meta name="twitter:image" content="https://arleta.site/interactivelink/118/logo-cubaingat.png" />
+
+<!-- Favicon -->
+  <link rel="icon" href="https://arleta.site/interactivelink/118/logo-cubaingat.png" type="image/png" />
+
+<style>
+    /* --- PALETTE PASTEL & TYPOGRAPHY CLEAN --- */
+    :root {
+      --bg-color: #FAF8F5;          /* Soft Cream */
+      --card-bg: #FFFFFF;           /* Soft White */
+      --text-color: #4A4E69;        /* Muted Dark Slate */
+      --primary-pastel: #B5E2FA;    /* Soft Pastel Blue */
+      --accent-pastel: #EDAFB8;     /* Soft Pastel Pink */
+      --success-pastel: #E2ECE9;    /* Soft Sage Green */
+      --border-radius: 16px;
+    }
+
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      padding: 20px 15px;
+      min-height: 100vh;
+    }
+
+.container {
+      width: 100%;
+      max-width: 480px; /* Saiz ideal skrin telefon */
+    }
+
+/* --- HEADER (HANYA LOGO SAHAJA) --- */
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+img.logo {
+      width: 140px; /* Saiz logo disesuaikan supaya lebih jelas */
+      height: auto;
+    }
+
+/* --- BUTANG UTAMA & REKA BENTUK --- */
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--primary-pastel);
+      color: #2B2D42;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+      margin-bottom: 25px;
+      transition: transform 0.1s ease, background-color 0.2s ease;
+    }
+
+.btn-primary:active {
+      transform: scale(0.98);
+    }
+
+h2 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      color: #3D405B;
+    }
+
+/* --- SENARAI TASK --- */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+.task-card {
+      background-color: var(--card-bg);
+      padding: 16px;
+      border-radius: var(--border-radius);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+.task-info h4 {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+.task-info span {
+      font-size: 0.85rem;
+      color: #6C757D;
+      background-color: #F1F5F9;
+      padding: 4px 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+/* --- BUTANG DONE --- */
+    .btn-done {
+      background-color: var(--success-pastel);
+      border: none;
+      color: #2D6A4F;
+      font-weight: bold;
+      padding: 10px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+
+.btn-done:active {
+      background-color: #C1DFD7;
+    }
+
+/* --- HYPERLINK KE HISTORY --- */
+    .footer-link {
+      text-align: center;
+      margin-top: 15px;
+      padding-bottom: 20px;
+    }
+
+.footer-link a, .history-header a {
+      color: #6C5CE7;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+.footer-link a:hover, .history-header a:hover {
+      text-decoration: underline;
+    }
+
+/* --- MODAL POPUP --- */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+.modal-content {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 400px;
+      padding: 22px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+.modal-content h3 {
+      margin-bottom: 15px;
+      color: #3D405B;
+    }
+
+.modal-content label {
+      display: block;
+      font-size: 0.85rem;
+      margin: 12px 0 5px;
+      color: #6C757D;
+    }
+
+.modal-content input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      background-color: #FAFAFA;
+    }
+
+.modal-content input:focus {
+      border-color: var(--primary-pastel);
+      background-color: #FFFFFF;
+    }
+
+.modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+.btn-save {
+      flex: 1;
+      background-color: var(--accent-pastel);
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #5C2C35;
+      cursor: pointer;
+    }
+
+.btn-cancel {
+      flex: 1;
+      background-color: #E9ECEF;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      color: #495057;
+      cursor: pointer;
+    }
+
+/* --- HELPER CLASSES --- */
+    .hidden {
+      display: none !important;
+    }
+
+.history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header: Hanya Logo Sahaja -->
+    <header>
+      <img 
+        src="https://arleta.site/interactivelink/118/logo-cubaingat.png" 
+        alt="Logo CubaIngat" 
+        class="logo" 
+      />
+    </header>
+
+<!-- Halaman Utama (Tugasan Aktif) -->
+    <main id="main-page">
+      <!-- Klik 1: Butang Tambah Task -->
+      <button id="btn-open-modal" class="btn-primary">+ Tambah Task</button>
+
+<h2>Tugasan Hari Ini</h2>
+      <div id="task-list" class="task-list">
+        <!-- Task aktif akan dimuatkan di sini -->
+      </div>
+
+<div class="footer-link">
+        <a href="#" id="link-to-history">📜 Lihat Sejarah Tugasan</a>
+      </div>
+    </main>
+
+<!-- Halaman Sejarah (History Page) -->
+    <main id="history-page" class="hidden">
+      <div class="history-header">
+        <h2>📜 Sejarah Tugasan</h2>
+        <a href="#" id="link-to-main">← Kembali ke Utama</a>
+      </div>
+
+<div id="history-list" class="task-list">
+        <!-- Task yang selesai akan dimuatkan di sini -->
+      </div>
+    </main>
+  </div>
+
+<!-- Modal Popup Tambah Task -->
+  <div id="task-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Tambah Task Baru</h3>
+
+<!-- Klik 2 & Taip: Input Nama & Masa -->
+      <label for="task-title">Nama Task:</label>
+      <input type="text" id="task-title" placeholder="Contoh: Matikan suis iron" autocomplete="off">
+
+<label for="task-time">Pilih Masa Peringatan:</label>
+      <input type="time" id="task-time">
+
+<!-- Klik 3: Simpan -->
+      <div class="modal-actions">
+        <button id="btn-save-task" class="btn-save">Simpan</button>
+        <button id="btn-cancel-task" class="btn-cancel">Batal</button>
+      </div>
+    </div>
+  </div>
+
+<!-- JavaScript Logic -->
+  <script>
+    // --- MEMUATKAN DATA DARI LOCALSTORAGE ---
+    let tasks = JSON.parse(localStorage.getItem('cubaingat_tasks')) || [];
+    let history = JSON.parse(localStorage.getItem('cubaingat_history')) || [];
+
+    // --- ELEMEN DOM ---
+    const mainPage = document.getElementById('main-page');
+    const historyPage = document.getElementById('history-page');
+    const taskModal = document.getElementById('task-modal');
+
+    const btnOpenModal = document.getElementById('btn-open-modal');
+    const btnSaveTask = document.getElementById('btn-save-task');
+    const btnCancelTask = document.getElementById('btn-cancel-task');
+
+    const linkToHistory = document.getElementById('link-to-history');
+    const linkToMain = document.getElementById('link-to-main');
+
+    const taskList = document.getElementById('task-list');
+    const historyList = document.getElementById('history-list');
+
+    const inputTitle = document.getElementById('task-title');
+    const inputTime = document.getElementById('task-time');
+
+    // Minta Kebenaran Notifikasi Browser apabila mula-mula dibuka
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    // Render senarai tugasan pertama kali
+    renderTasks();
+
+    // --- EVENT LISTENERS (MODAL & NAVIGASI) ---
+
+    // Klik 1: Buka Modal
+    btnOpenModal.addEventListener('click', () => {
+      taskModal.classList.remove('hidden');
+      inputTitle.focus();
+    });
+
+    // Batal Modal
+    btnCancelTask.addEventListener('click', () => {
+      taskModal.classList.add('hidden');
+      clearInputs();
+    });
+
+    // Klik 3: Simpan Task
+    btnSaveTask.addEventListener('click', () => {
+      const title = inputTitle.value.trim();
+      const time = inputTime.value;
+
+      if (!title) {
+        alert("Sila masukkan nama task!");
+        return;
+      }
+
+      const newTask = {
+        id: Date.now(),
+        title: title,
+        time: time || "Tiada Masa",
+        notified: false
+      };
+
+      tasks.push(newTask);
+      saveToStorage();
+      renderTasks();
+
+      taskModal.classList.add('hidden');
+      clearInputs();
+    });
+
+    // Pindah ke Halaman Sejarah (Hyperlink Klik)
+    linkToHistory.addEventListener('click', (e) => {
+      e.preventDefault();
+      mainPage.classList.add('hidden');
+      historyPage.classList.remove('hidden');
+      renderHistory();
+    });
+
+    // Kembali ke Halaman Utama
+    linkToMain.addEventListener('click', (e) => {
+      e.preventDefault();
+      historyPage.classList.add('hidden');
+      mainPage.classList.remove('hidden');
+    });
+
+    // --- FUNGSI RENDER & URUS DATA ---
+
+    function renderTasks() {
+      taskList.innerHTML = '';
+      
+      if (tasks.length === 0) {
+        taskList.innerHTML = '<p style="color:#94A3B8; text-align:center; padding: 20px 0;">Tiada task aktif. Hari yang tenang! ☕</p>';
+        return;
+      }
+
+      tasks.forEach(task => {
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.innerHTML = `
+          <div class="task-info">
+            <h4>${escapeHTML(task.title)}</h4>
+            <span>⏰ ${task.time}</span>
+          </div>
+          <button class="btn-done" onclick="completeTask(${task.id})">Done</button>
+        `;
+        taskList.appendChild(card);
+      });
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = '';
+
+      if (history.length === 0) {
+        historyList.innerHTML = '<p style="color:#94A3B8; text-align:center; padding: 20px 0;">Belum ada sejarah task yang selesai.</p>';
+        return;
+      }
+
+      history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.style.opacity = '0.85';
+        card.innerHTML = `
+          <div class="task-info">
+            <h4 style="text-decoration: line-through; color: #8D99AE;">${escapeHTML(item.title)}</h4>
+            <span>Selesai: ${item.completedAt}</span>
+          </div>
+        `;
+        historyList.appendChild(card);
+      });
+    }
+
+    // Pindahkan Task ke Sejarah bila tekan 'Done'
+    window.completeTask = function(id) {
+      const taskIndex = tasks.findIndex(t => t.id === id);
+      if (taskIndex > -1) {
+        const completedTask = tasks.splice(taskIndex, 1)[0];
+        
+        // Format Masa Siap (HH:MM AM/PM)
+        const now = new Date();
+        completedTask.completedAt = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        history.unshift(completedTask); // Simpan di atas sekali
+        saveToStorage();
+        renderTasks();
+      }
+    };
+
+    function saveToStorage() {
+      localStorage.setItem('cubaingat_tasks', JSON.stringify(tasks));
+      localStorage.setItem('cubaingat_history', JSON.stringify(history));
+    }
+
+    function clearInputs() {
+      inputTitle.value = '';
+      inputTime.value = '';
+    }
+
+    // Elak XSS Injection pada Teks Task
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+
+    // --- SEMAKAN MASA & NOTIFIKASI GETAR ---
+    setInterval(() => {
+      const now = new Date();
+      const currentHours = String(now.getHours()).padStart(2, '0');
+      const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+      const currentTimeString = `${currentHours}:${currentMinutes}`;
+
+      tasks.forEach(task => {
+        if (task.time === currentTimeString && !task.notified) {
+          triggerNotification(task.title);
+          task.notified = true; // Elak notifikasi berulang dalam seminit
+          saveToStorage();
+        }
+      });
+    }, 5000); // Semak setiap 5 saat
+
+    function triggerNotification(title) {
+      // Getaran telefon (Vibration API)
+      if ("vibrate" in navigator) {
+        navigator.vibrate([500, 250, 500]); // Pattern: Getar 0.5s, Henti 0.25s, Getar 0.5s
+      }
+
+      // Notifikasi Paparan Skrin
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("CubaIngat", {
+          body: `Tak Ingat? CubaIngat: ${title}`,
+          icon: "https://arleta.site/interactivelink/118/logo-cubaingat.png"
+        });
+      } else {
+        alert(`CubaIngat:\n\nTak Ingat? CubaIngat: ${title}`);
+      }
+    }
+  </script>
+</body>
+</html>
