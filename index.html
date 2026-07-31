@@ -10,32 +10,32 @@
   <meta name="keywords" content="CubaIngat, peringatan, task note, pengurusan masa, checklist, aplikasi pelupa" />
   <meta name="author" content="CubaIngat.com" />
 
-  <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+  <!-- PWA Manifest & Web App Mobile Tags -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#B5E2FA" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="CubaIngat" />
+
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Tak Ingat? CubaIngat." />
   <meta property="og:description" content="Web app untuk bantu anda yang selalu lupa." />
   <meta property="og:url" content="https://cubaingat.com" />
   <meta property="og:image" content="https://arleta.site/interactivelink/118/logo-cubaingat.png" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Tak Ingat? CubaIngat." />
-  <meta name="twitter:description" content="Web app untuk bantu anda yang selalu lupa." />
-  <meta name="twitter:image" content="https://arleta.site/interactivelink/118/logo-cubaingat.png" />
-
   <!-- Favicon -->
   <link rel="icon" href="https://arleta.site/interactivelink/118/logo-cubaingat.png" type="image/png" />
 
   <style>
-    /* --- PALETTE PASTEL & TYPOGRAPHY CLEAN --- */
     :root {
-      --bg-color: #FAF8F5;          /* Soft Cream */
-      --card-bg: #FFFFFF;           /* Soft White */
-      --text-color: #4A4E69;        /* Muted Dark Slate */
-      --primary-pastel: #B5E2FA;    /* Soft Pastel Blue */
-      --accent-pastel: #EDAFB8;     /* Soft Pastel Pink */
-      --success-pastel: #E2ECE9;    /* Soft Sage Green */
-      --badge-pastel: #E8AEB7;      /* Subtle Badge Pink */
+      --bg-color: #FAF8F5;
+      --card-bg: #FFFFFF;
+      --text-color: #4A4E69;
+      --primary-pastel: #B5E2FA;
+      --accent-pastel: #EDAFB8;
+      --success-pastel: #E2ECE9;
+      --badge-pastel: #E8AEB7;
       --border-radius: 16px;
     }
 
@@ -57,10 +57,9 @@
 
     .container {
       width: 100%;
-      max-width: 480px; /* Saiz ideal skrin telefon */
+      max-width: 480px;
     }
 
-    /* --- HEADER (HANYA LOGO SAHAJA) --- */
     header {
       text-align: center;
       margin-bottom: 25px;
@@ -71,7 +70,6 @@
       height: auto;
     }
 
-    /* --- BUTANG UTAMA & REKA BENTUK --- */
     .btn-primary {
       width: 100%;
       padding: 16px;
@@ -97,7 +95,6 @@
       color: #3D405B;
     }
 
-    /* --- SENARAI TASK --- */
     .task-list {
       display: flex;
       flex-direction: column;
@@ -142,7 +139,6 @@
       font-weight: 600;
     }
 
-    /* --- BUTANG DONE --- */
     .btn-done {
       background-color: var(--success-pastel);
       border: none;
@@ -160,7 +156,6 @@
       background-color: #C1DFD7;
     }
 
-    /* --- HYPERLINK & FOOTER --- */
     .footer-link {
       text-align: center;
       margin-top: 15px;
@@ -178,7 +173,6 @@
       text-decoration: underline;
     }
 
-    /* --- SEKSYEN BACKUP (EXPORT & IMPORT) --- */
     .backup-section {
       margin-top: 25px;
       padding-top: 15px;
@@ -209,11 +203,6 @@
       cursor: pointer;
     }
 
-    .btn-secondary:active {
-      background-color: #E2E8F0;
-    }
-
-    /* --- MODAL POPUP --- */
     .modal {
       position: fixed;
       top: 0; left: 0;
@@ -258,11 +247,6 @@
       color: var(--text-color);
     }
 
-    .modal-content input:focus, .modal-content select:focus {
-      border-color: var(--primary-pastel);
-      background-color: #FFFFFF;
-    }
-
     .modal-actions {
       display: flex;
       gap: 10px;
@@ -290,7 +274,6 @@
       cursor: pointer;
     }
 
-    /* --- HELPER CLASSES --- */
     .hidden {
       display: none !important;
     }
@@ -306,60 +289,44 @@
 <body>
 
   <div class="container">
-    <!-- Header: Hanya Logo Sahaja -->
     <header>
-      <img 
-        src="https://arleta.site/interactivelink/118/logo-cubaingat.png" 
-        alt="Logo CubaIngat" 
-        class="logo" 
-      />
+      <img src="https://arleta.site/interactivelink/118/logo-cubaingat.png" alt="Logo CubaIngat" class="logo" />
     </header>
 
-    <!-- Halaman Utama (Tugasan Aktif) -->
     <main id="main-page">
-      <!-- Klik 1: Butang Tambah Task -->
       <button id="btn-open-modal" class="btn-primary">+ Tambah Task</button>
 
       <h2>Tugasan Hari Ini</h2>
-      <div id="task-list" class="task-list">
-        <!-- Task aktif akan dimuatkan di sini -->
-      </div>
+      <div id="task-list" class="task-list"></div>
 
       <div class="footer-link">
         <a href="#" id="link-to-history">📜 Lihat Sejarah Tugasan</a>
       </div>
 
-      <!-- Seksyen Backup (Export / Import) -->
       <div class="backup-section">
         <p>💾 Simpan simpanan keselamatan data anda</p>
         <div class="backup-buttons">
           <button id="btn-export" class="btn-secondary">📥 Export Backup</button>
           <button id="btn-import-trigger" class="btn-secondary">📤 Import Backup</button>
         </div>
-        <!-- Input Fail Tersembunyi untuk Import -->
         <input type="file" id="import-file" accept=".json" class="hidden" />
       </div>
     </main>
 
-    <!-- Halaman Sejarah (History Page) -->
     <main id="history-page" class="hidden">
       <div class="history-header">
         <h2>📜 Sejarah Tugasan</h2>
         <a href="#" id="link-to-main">← Kembali ke Utama</a>
       </div>
-      
-      <div id="history-list" class="task-list">
-        <!-- Task yang selesai akan dimuatkan di sini -->
-      </div>
+      <div id="history-list" class="task-list"></div>
     </main>
   </div>
 
-  <!-- Modal Popup Tambah Task -->
+  <!-- Modal Popup -->
   <div id="task-modal" class="modal hidden">
     <div class="modal-content">
       <h3>Tambah Task Baru</h3>
       
-      <!-- Klik 2 & Taip: Input Nama, Masa & Ulangan -->
       <label for="task-title">Nama Task:</label>
       <input type="text" id="task-title" placeholder="Contoh: Makan ubat gastrik" autocomplete="off">
 
@@ -373,7 +340,6 @@
         <option value="weekly">Setiap Minggu (Weekly)</option>
       </select>
 
-      <!-- Klik 3: Simpan -->
       <div class="modal-actions">
         <button id="btn-save-task" class="btn-save">Simpan</button>
         <button id="btn-cancel-task" class="btn-cancel">Batal</button>
@@ -381,13 +347,32 @@
     </div>
   </div>
 
-  <!-- JavaScript Logic -->
   <script>
-    // --- MEMUATKAN DATA DARI LOCALSTORAGE ---
     let tasks = JSON.parse(localStorage.getItem('cubaingat_tasks')) || [];
     let history = JSON.parse(localStorage.getItem('cubaingat_history')) || [];
+    let swRegistration = null;
 
-    // --- ELEMEN DOM ---
+    // --- 1. DAFTAR SERVICE WORKER & NOTIFICATION PERMISSION ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => {
+            swRegistration = reg;
+            console.log('Service Worker berjaya didaftarkan:', reg.scope);
+          })
+          .catch((err) => {
+            console.error('Pendaftaran Service Worker gagal:', err);
+          });
+      });
+    }
+
+    function requestNotificationPermission() {
+      if ("Notification" in window && Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
+    }
+
+    // --- 2. DOM ELEMENTS & INITIALIZATION ---
     const mainPage = document.getElementById('main-page');
     const historyPage = document.getElementById('history-page');
     const taskModal = document.getElementById('task-modal');
@@ -410,28 +395,20 @@
     const btnImportTrigger = document.getElementById('btn-import-trigger');
     const importFile = document.getElementById('import-file');
 
-    // Minta Kebenaran Notifikasi Browser
-    if ("Notification" in window && Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-
     renderTasks();
 
-    // --- EVENT LISTENERS (MODAL & NAVIGASI) ---
-
-    // Klik 1: Buka Modal
+    // --- 3. EVENT LISTENERS ---
     btnOpenModal.addEventListener('click', () => {
+      requestNotificationPermission(); // Minta kebenaran bila pengguna nak mula tambah task
       taskModal.classList.remove('hidden');
       inputTitle.focus();
     });
 
-    // Batal Modal
     btnCancelTask.addEventListener('click', () => {
       taskModal.classList.add('hidden');
       clearInputs();
     });
 
-    // Klik 3: Simpan Task
     btnSaveTask.addEventListener('click', () => {
       const title = inputTitle.value.trim();
       const time = inputTime.value;
@@ -458,7 +435,6 @@
       clearInputs();
     });
 
-    // Pindah ke Halaman Sejarah
     linkToHistory.addEventListener('click', (e) => {
       e.preventDefault();
       mainPage.classList.add('hidden');
@@ -466,22 +442,19 @@
       renderHistory();
     });
 
-    // Kembali ke Halaman Utama
     linkToMain.addEventListener('click', (e) => {
       e.preventDefault();
       historyPage.classList.add('hidden');
       mainPage.classList.remove('hidden');
     });
 
-    // --- FUNGSI EXPORT & IMPORT BACKUP DATA ---
-
+    // --- 4. EXPORT & IMPORT ---
     btnExport.addEventListener('click', () => {
       const backupData = {
         tasks: tasks,
         history: history,
         exportDate: new Date().toISOString()
       };
-
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
@@ -491,9 +464,7 @@
       downloadAnchor.remove();
     });
 
-    btnImportTrigger.addEventListener('click', () => {
-      importFile.click();
-    });
+    btnImportTrigger.addEventListener('click', () => importFile.click());
 
     importFile.addEventListener('change', (e) => {
       const file = e.target.files[0];
@@ -517,14 +488,12 @@
         }
       };
       reader.readAsText(file);
-      importFile.value = ''; // Reset input
+      importFile.value = '';
     });
 
-    // --- FUNGSI RENDER & URUS DATA ---
-
+    // --- 5. RENDER FUNCTIONS ---
     function renderTasks() {
       taskList.innerHTML = '';
-      
       if (tasks.length === 0) {
         taskList.innerHTML = '<p style="color:#94A3B8; text-align:center; padding: 20px 0;">Tiada task aktif. Hari yang tenang! ☕</p>';
         return;
@@ -554,7 +523,6 @@
 
     function renderHistory() {
       historyList.innerHTML = '';
-
       if (history.length === 0) {
         historyList.innerHTML = '<p style="color:#94A3B8; text-align:center; padding: 20px 0;">Belum ada sejarah task yang selesai.</p>';
         return;
@@ -580,7 +548,6 @@
       });
     }
 
-    // Pindahkan Task ke Sejarah & Urus Task Berulang
     window.completeTask = function(id) {
       const taskIndex = tasks.findIndex(t => t.id === id);
       if (taskIndex > -1) {
@@ -588,7 +555,6 @@
         const now = new Date();
         const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        // Catat rekod dalam History
         history.unshift({
           id: Date.now(),
           title: currentTask.title,
@@ -596,11 +562,9 @@
           completedAt: timeString
         });
 
-        // Jika Task Berulang (Daily/Weekly), reset status notifikasi
         if (currentTask.repeat === 'daily' || currentTask.repeat === 'weekly') {
-          currentTask.notified = false; // Boleh terima notifikasi esok/minggu depan
+          currentTask.notified = false;
         } else {
-          // Jika Task Sekali Sahaja, padam dari senarai aktif
           tasks.splice(taskIndex, 1);
         }
 
@@ -632,7 +596,7 @@
       );
     }
 
-    // --- SEMAKAN MASA & NOTIFIKASI GETAR ---
+    // --- 6. PENJADUALAN NOTIFIKASI VIA SERVICE WORKER ---
     setInterval(() => {
       const now = new Date();
       const currentHours = String(now.getHours()).padStart(2, '0');
@@ -641,22 +605,30 @@
 
       tasks.forEach(task => {
         if (task.time === currentTimeString && !task.notified) {
-          triggerNotification(task.title);
+          triggerPwaNotification(task.title);
           task.notified = true;
           saveToStorage();
         }
       });
     }, 5000);
 
-    function triggerNotification(title) {
+    function triggerPwaNotification(title) {
+      // Getar peranti (fallback jika tidak dikendalikan oleh OS)
       if ("vibrate" in navigator) {
         navigator.vibrate([500, 250, 500]);
       }
 
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("CubaIngat", {
+      // Hantar pemicu notifikasi ke Service Worker
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'SHOW_NOTIFICATION',
+          title: 'CubaIngat ⏰',
+          body: `Tak Ingat? CubaIngat: ${title}`
+        });
+      } else if (swRegistration) {
+        swRegistration.showNotification('CubaIngat ⏰', {
           body: `Tak Ingat? CubaIngat: ${title}`,
-          icon: "https://arleta.site/interactivelink/118/logo-cubaingat.png"
+          icon: 'https://arleta.site/interactivelink/118/logo-cubaingat.png'
         });
       } else {
         alert(`CubaIngat:\n\nTak Ingat? CubaIngat: ${title}`);
