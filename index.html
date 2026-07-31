@@ -4,29 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<!-- SEO Basic -->
+  <!-- SEO Basic -->
   <title>CubaIngat - Tak Ingat? CubaIngat.</title>
   <meta name="description" content="Web app untuk bantu anda yang selalu lupa. Tak Ingat? CubaIngat." />
   <meta name="keywords" content="CubaIngat, peringatan, task note, pengurusan masa, checklist, aplikasi pelupa" />
   <meta name="author" content="CubaIngat.com" />
 
-<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+  <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Tak Ingat? CubaIngat." />
   <meta property="og:description" content="Web app untuk bantu anda yang selalu lupa." />
   <meta property="og:url" content="https://cubaingat.com" />
   <meta property="og:image" content="https://arleta.site/interactivelink/118/logo-cubaingat.png" />
 
-<!-- Twitter Card -->
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Tak Ingat? CubaIngat." />
   <meta name="twitter:description" content="Web app untuk bantu anda yang selalu lupa." />
   <meta name="twitter:image" content="https://arleta.site/interactivelink/118/logo-cubaingat.png" />
 
-<!-- Favicon -->
+  <!-- Favicon -->
   <link rel="icon" href="https://arleta.site/interactivelink/118/logo-cubaingat.png" type="image/png" />
 
-<style>
+  <style>
     /* --- PALETTE PASTEL & TYPOGRAPHY CLEAN --- */
     :root {
       --bg-color: #FAF8F5;          /* Soft Cream */
@@ -35,17 +35,18 @@
       --primary-pastel: #B5E2FA;    /* Soft Pastel Blue */
       --accent-pastel: #EDAFB8;     /* Soft Pastel Pink */
       --success-pastel: #E2ECE9;    /* Soft Sage Green */
+      --badge-pastel: #E8AEB7;      /* Subtle Badge Pink */
       --border-radius: 16px;
     }
 
-* {
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
-body {
+    body {
       background-color: var(--bg-color);
       color: var(--text-color);
       display: flex;
@@ -54,23 +55,23 @@ body {
       min-height: 100vh;
     }
 
-.container {
+    .container {
       width: 100%;
       max-width: 480px; /* Saiz ideal skrin telefon */
     }
 
-/* --- HEADER (HANYA LOGO SAHAJA) --- */
+    /* --- HEADER (HANYA LOGO SAHAJA) --- */
     header {
       text-align: center;
       margin-bottom: 25px;
     }
 
-img.logo {
-      width: 140px; /* Saiz logo disesuaikan supaya lebih jelas */
+    img.logo {
+      width: 140px;
       height: auto;
     }
 
-/* --- BUTANG UTAMA & REKA BENTUK --- */
+    /* --- BUTANG UTAMA & REKA BENTUK --- */
     .btn-primary {
       width: 100%;
       padding: 16px;
@@ -86,17 +87,17 @@ img.logo {
       transition: transform 0.1s ease, background-color 0.2s ease;
     }
 
-.btn-primary:active {
+    .btn-primary:active {
       transform: scale(0.98);
     }
 
-h2 {
+    h2 {
       font-size: 1.2rem;
       margin-bottom: 12px;
       color: #3D405B;
     }
 
-/* --- SENARAI TASK --- */
+    /* --- SENARAI TASK --- */
     .task-list {
       display: flex;
       flex-direction: column;
@@ -104,7 +105,7 @@ h2 {
       margin-bottom: 25px;
     }
 
-.task-card {
+    .task-card {
       background-color: var(--card-bg);
       padding: 16px;
       border-radius: var(--border-radius);
@@ -114,22 +115,34 @@ h2 {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
-.task-info h4 {
+    .task-info h4 {
       font-size: 1.05rem;
       margin-bottom: 6px;
       word-break: break-word;
     }
 
-.task-info span {
-      font-size: 0.85rem;
+    .task-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .task-info span {
+      font-size: 0.8rem;
       color: #6C757D;
       background-color: #F1F5F9;
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
       display: inline-block;
     }
 
-/* --- BUTANG DONE --- */
+    .badge-repeat {
+      background-color: #FFF3BF !important;
+      color: #856404 !important;
+      font-weight: 600;
+    }
+
+    /* --- BUTANG DONE --- */
     .btn-done {
       background-color: var(--success-pastel);
       border: none;
@@ -143,29 +156,64 @@ h2 {
       margin-left: 10px;
     }
 
-.btn-done:active {
+    .btn-done:active {
       background-color: #C1DFD7;
     }
 
-/* --- HYPERLINK KE HISTORY --- */
+    /* --- HYPERLINK & FOOTER --- */
     .footer-link {
       text-align: center;
       margin-top: 15px;
-      padding-bottom: 20px;
+      padding-bottom: 15px;
     }
 
-.footer-link a, .history-header a {
+    .footer-link a, .history-header a {
       color: #6C5CE7;
       text-decoration: none;
       font-size: 0.95rem;
       font-weight: 600;
     }
 
-.footer-link a:hover, .history-header a:hover {
+    .footer-link a:hover, .history-header a:hover {
       text-decoration: underline;
     }
 
-/* --- MODAL POPUP --- */
+    /* --- SEKSYEN BACKUP (EXPORT & IMPORT) --- */
+    .backup-section {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px dashed #E2E8F0;
+      text-align: center;
+    }
+
+    .backup-section p {
+      font-size: 0.8rem;
+      color: #94A3B8;
+      margin-bottom: 10px;
+    }
+
+    .backup-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      background-color: #F1F5F9;
+      color: #475569;
+      border: 1px solid #CBD5E1;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn-secondary:active {
+      background-color: #E2E8F0;
+    }
+
+    /* --- MODAL POPUP --- */
     .modal {
       position: fixed;
       top: 0; left: 0;
@@ -178,7 +226,7 @@ h2 {
       z-index: 1000;
     }
 
-.modal-content {
+    .modal-content {
       background-color: var(--card-bg);
       width: 100%;
       max-width: 400px;
@@ -187,19 +235,19 @@ h2 {
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
-.modal-content h3 {
+    .modal-content h3 {
       margin-bottom: 15px;
       color: #3D405B;
     }
 
-.modal-content label {
+    .modal-content label {
       display: block;
       font-size: 0.85rem;
       margin: 12px 0 5px;
       color: #6C757D;
     }
 
-.modal-content input {
+    .modal-content input, .modal-content select {
       width: 100%;
       padding: 12px;
       border: 1px solid #E2E8F0;
@@ -207,20 +255,21 @@ h2 {
       font-size: 1rem;
       outline: none;
       background-color: #FAFAFA;
+      color: var(--text-color);
     }
 
-.modal-content input:focus {
+    .modal-content input:focus, .modal-content select:focus {
       border-color: var(--primary-pastel);
       background-color: #FFFFFF;
     }
 
-.modal-actions {
+    .modal-actions {
       display: flex;
       gap: 10px;
       margin-top: 20px;
     }
 
-.btn-save {
+    .btn-save {
       flex: 1;
       background-color: var(--accent-pastel);
       border: none;
@@ -231,7 +280,7 @@ h2 {
       cursor: pointer;
     }
 
-.btn-cancel {
+    .btn-cancel {
       flex: 1;
       background-color: #E9ECEF;
       border: none;
@@ -241,12 +290,12 @@ h2 {
       cursor: pointer;
     }
 
-/* --- HELPER CLASSES --- */
+    /* --- HELPER CLASSES --- */
     .hidden {
       display: none !important;
     }
 
-.history-header {
+    .history-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -256,7 +305,7 @@ h2 {
 </head>
 <body>
 
-<div class="container">
+  <div class="container">
     <!-- Header: Hanya Logo Sahaja -->
     <header>
       <img 
@@ -266,47 +315,65 @@ h2 {
       />
     </header>
 
-<!-- Halaman Utama (Tugasan Aktif) -->
+    <!-- Halaman Utama (Tugasan Aktif) -->
     <main id="main-page">
       <!-- Klik 1: Butang Tambah Task -->
       <button id="btn-open-modal" class="btn-primary">+ Tambah Task</button>
 
-<h2>Tugasan Hari Ini</h2>
+      <h2>Tugasan Hari Ini</h2>
       <div id="task-list" class="task-list">
         <!-- Task aktif akan dimuatkan di sini -->
       </div>
 
-<div class="footer-link">
+      <div class="footer-link">
         <a href="#" id="link-to-history">📜 Lihat Sejarah Tugasan</a>
+      </div>
+
+      <!-- Seksyen Backup (Export / Import) -->
+      <div class="backup-section">
+        <p>💾 Simpan simpanan keselamatan data anda</p>
+        <div class="backup-buttons">
+          <button id="btn-export" class="btn-secondary">📥 Export Backup</button>
+          <button id="btn-import-trigger" class="btn-secondary">📤 Import Backup</button>
+        </div>
+        <!-- Input Fail Tersembunyi untuk Import -->
+        <input type="file" id="import-file" accept=".json" class="hidden" />
       </div>
     </main>
 
-<!-- Halaman Sejarah (History Page) -->
+    <!-- Halaman Sejarah (History Page) -->
     <main id="history-page" class="hidden">
       <div class="history-header">
         <h2>📜 Sejarah Tugasan</h2>
         <a href="#" id="link-to-main">← Kembali ke Utama</a>
       </div>
-
-<div id="history-list" class="task-list">
+      
+      <div id="history-list" class="task-list">
         <!-- Task yang selesai akan dimuatkan di sini -->
       </div>
     </main>
   </div>
 
-<!-- Modal Popup Tambah Task -->
+  <!-- Modal Popup Tambah Task -->
   <div id="task-modal" class="modal hidden">
     <div class="modal-content">
       <h3>Tambah Task Baru</h3>
-
-<!-- Klik 2 & Taip: Input Nama & Masa -->
+      
+      <!-- Klik 2 & Taip: Input Nama, Masa & Ulangan -->
       <label for="task-title">Nama Task:</label>
-      <input type="text" id="task-title" placeholder="Contoh: Matikan suis iron" autocomplete="off">
+      <input type="text" id="task-title" placeholder="Contoh: Makan ubat gastrik" autocomplete="off">
 
-<label for="task-time">Pilih Masa Peringatan:</label>
+      <label for="task-time">Pilih Masa Peringatan:</label>
       <input type="time" id="task-time">
 
-<!-- Klik 3: Simpan -->
+      <label for="task-repeat">Task Berulang:</label>
+      <select id="task-repeat">
+        <option value="none">Sekali sahaja</option>
+        <option value="daily">Setiap Hari (Daily)</option>
+        <option value="weekly">Setiap Minggu (Weekly)</option>
+      </select>
+
+      <!-- Klik 3: Simpan -->
       <div class="modal-actions">
         <button id="btn-save-task" class="btn-save">Simpan</button>
         <button id="btn-cancel-task" class="btn-cancel">Batal</button>
@@ -314,7 +381,7 @@ h2 {
     </div>
   </div>
 
-<!-- JavaScript Logic -->
+  <!-- JavaScript Logic -->
   <script>
     // --- MEMUATKAN DATA DARI LOCALSTORAGE ---
     let tasks = JSON.parse(localStorage.getItem('cubaingat_tasks')) || [];
@@ -337,13 +404,17 @@ h2 {
 
     const inputTitle = document.getElementById('task-title');
     const inputTime = document.getElementById('task-time');
+    const inputRepeat = document.getElementById('task-repeat');
 
-    // Minta Kebenaran Notifikasi Browser apabila mula-mula dibuka
+    const btnExport = document.getElementById('btn-export');
+    const btnImportTrigger = document.getElementById('btn-import-trigger');
+    const importFile = document.getElementById('import-file');
+
+    // Minta Kebenaran Notifikasi Browser
     if ("Notification" in window && Notification.permission !== "granted") {
       Notification.requestPermission();
     }
 
-    // Render senarai tugasan pertama kali
     renderTasks();
 
     // --- EVENT LISTENERS (MODAL & NAVIGASI) ---
@@ -364,6 +435,7 @@ h2 {
     btnSaveTask.addEventListener('click', () => {
       const title = inputTitle.value.trim();
       const time = inputTime.value;
+      const repeat = inputRepeat.value;
 
       if (!title) {
         alert("Sila masukkan nama task!");
@@ -374,6 +446,7 @@ h2 {
         id: Date.now(),
         title: title,
         time: time || "Tiada Masa",
+        repeat: repeat,
         notified: false
       };
 
@@ -385,7 +458,7 @@ h2 {
       clearInputs();
     });
 
-    // Pindah ke Halaman Sejarah (Hyperlink Klik)
+    // Pindah ke Halaman Sejarah
     linkToHistory.addEventListener('click', (e) => {
       e.preventDefault();
       mainPage.classList.add('hidden');
@@ -398,6 +471,53 @@ h2 {
       e.preventDefault();
       historyPage.classList.add('hidden');
       mainPage.classList.remove('hidden');
+    });
+
+    // --- FUNGSI EXPORT & IMPORT BACKUP DATA ---
+
+    btnExport.addEventListener('click', () => {
+      const backupData = {
+        tasks: tasks,
+        history: history,
+        exportDate: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `CubaIngat_Backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    });
+
+    btnImportTrigger.addEventListener('click', () => {
+      importFile.click();
+    });
+
+    importFile.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const importedData = JSON.parse(event.target.result);
+          if (importedData.tasks && importedData.history) {
+            tasks = importedData.tasks;
+            history = importedData.history;
+            saveToStorage();
+            renderTasks();
+            alert("✅ Backup data berjaya dimuat masuk!");
+          } else {
+            alert("❌ Format fail backup tidak sah.");
+          }
+        } catch (err) {
+          alert("❌ Ralat membaca fail JSON backup.");
+        }
+      };
+      reader.readAsText(file);
+      importFile.value = ''; // Reset input
     });
 
     // --- FUNGSI RENDER & URUS DATA ---
@@ -413,10 +533,18 @@ h2 {
       tasks.forEach(task => {
         const card = document.createElement('div');
         card.className = 'task-card';
+
+        let repeatLabel = '';
+        if (task.repeat === 'daily') repeatLabel = '<span class="badge-repeat">🔄 Daily</span>';
+        if (task.repeat === 'weekly') repeatLabel = '<span class="badge-repeat">🔄 Weekly</span>';
+
         card.innerHTML = `
           <div class="task-info">
             <h4>${escapeHTML(task.title)}</h4>
-            <span>⏰ ${task.time}</span>
+            <div class="task-badges">
+              <span>⏰ ${task.time}</span>
+              ${repeatLabel}
+            </div>
           </div>
           <button class="btn-done" onclick="completeTask(${task.id})">Done</button>
         `;
@@ -436,27 +564,46 @@ h2 {
         const card = document.createElement('div');
         card.className = 'task-card';
         card.style.opacity = '0.85';
+
+        let repeatBadge = item.repeat && item.repeat !== 'none' ? `<span class="badge-repeat">🔄 ${item.repeat}</span>` : '';
+
         card.innerHTML = `
           <div class="task-info">
             <h4 style="text-decoration: line-through; color: #8D99AE;">${escapeHTML(item.title)}</h4>
-            <span>Selesai: ${item.completedAt}</span>
+            <div class="task-badges">
+              <span>Selesai: ${item.completedAt}</span>
+              ${repeatBadge}
+            </div>
           </div>
         `;
         historyList.appendChild(card);
       });
     }
 
-    // Pindahkan Task ke Sejarah bila tekan 'Done'
+    // Pindahkan Task ke Sejarah & Urus Task Berulang
     window.completeTask = function(id) {
       const taskIndex = tasks.findIndex(t => t.id === id);
       if (taskIndex > -1) {
-        const completedTask = tasks.splice(taskIndex, 1)[0];
-        
-        // Format Masa Siap (HH:MM AM/PM)
+        const currentTask = tasks[taskIndex];
         const now = new Date();
-        completedTask.completedAt = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        history.unshift(completedTask); // Simpan di atas sekali
+        // Catat rekod dalam History
+        history.unshift({
+          id: Date.now(),
+          title: currentTask.title,
+          repeat: currentTask.repeat,
+          completedAt: timeString
+        });
+
+        // Jika Task Berulang (Daily/Weekly), reset status notifikasi
+        if (currentTask.repeat === 'daily' || currentTask.repeat === 'weekly') {
+          currentTask.notified = false; // Boleh terima notifikasi esok/minggu depan
+        } else {
+          // Jika Task Sekali Sahaja, padam dari senarai aktif
+          tasks.splice(taskIndex, 1);
+        }
+
         saveToStorage();
         renderTasks();
       }
@@ -470,9 +617,9 @@ h2 {
     function clearInputs() {
       inputTitle.value = '';
       inputTime.value = '';
+      inputRepeat.value = 'none';
     }
 
-    // Elak XSS Injection pada Teks Task
     function escapeHTML(str) {
       return str.replace(/[&<>'"]/g, 
         tag => ({
@@ -495,19 +642,17 @@ h2 {
       tasks.forEach(task => {
         if (task.time === currentTimeString && !task.notified) {
           triggerNotification(task.title);
-          task.notified = true; // Elak notifikasi berulang dalam seminit
+          task.notified = true;
           saveToStorage();
         }
       });
-    }, 5000); // Semak setiap 5 saat
+    }, 5000);
 
     function triggerNotification(title) {
-      // Getaran telefon (Vibration API)
       if ("vibrate" in navigator) {
-        navigator.vibrate([500, 250, 500]); // Pattern: Getar 0.5s, Henti 0.25s, Getar 0.5s
+        navigator.vibrate([500, 250, 500]);
       }
 
-      // Notifikasi Paparan Skrin
       if ("Notification" in window && Notification.permission === "granted") {
         new Notification("CubaIngat", {
           body: `Tak Ingat? CubaIngat: ${title}`,
